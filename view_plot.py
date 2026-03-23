@@ -1,17 +1,25 @@
-# Project: FT-IR Background Monitor
-# Use: This script is used in Thermo Fisher OMNIC workflows to display
-# the updated PNG plot for visual monitoring of spectrum background stability.
-# It helps the operator verify complete cleaning of the ATR/HATR module.
-# Software: Thermo Fisher OMNIC
-# Input: current_background.png
-# Output: on-screen plot window
-# Platform: Windows
-# Python: 3.14
-# Author: Roberto Moscetti
-# Affiliation: University of Tuscia, Italy
-# Contact: rmoscetti@unitus.it
-# License: MIT
-# Version: 1.0.0
+# ============================================================
+# FT-IR Background Monitor
+# ============================================================
+# Purpose:
+#   Display the latest generated PNG in a persistent on-screen window.
+#   Used for visual monitoring of background stability and ATR/HATR cleaning.
+#
+# Runtime:
+#   Software: Thermo Fisher OMNIC
+#   Platform: Windows
+#   Python: 3.14
+#
+# I/O:
+#   Input: current_background.png
+#   Output: on-screen plot window
+#
+# Metadata:
+#   Author: Roberto Moscetti
+#   Affiliation: University of Tuscia, Italy
+#   Contact: rmoscetti@unitus.it
+#   License: MIT
+#   Version: 1.0.0
 
 from pathlib import Path
 import sys
