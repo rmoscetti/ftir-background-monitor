@@ -6,6 +6,7 @@ These scripts are intended for Thermo Fisher OMNIC workflows:
 
 - `plot_spectrum.py` reads `background_stability.TSV` and generates `current_background.png`
 - `view_plot.py` displays `current_background.png` in a window and reloads it when the file changes
+- the TSV file name configured in the OMNIC workflow must match the file name expected by `plot_spectrum.py`
 
 Typical use case:
 
@@ -65,6 +66,12 @@ At each cycle:
 - it updates the timestamp shown at the top of the plot
 - it overwrites `current_background.png`
 - `view_plot.py` detects the change and refreshes the window
+
+TSV file name requirement:
+
+- the OMNIC workflow must export the spectrum as `background_stability.TSV`
+- `plot_spectrum.py` is hardcoded to read `background_stability.TSV`
+- if you change the TSV file name in the workflow, you must change it in `plot_spectrum.py` as well
 
 Notes:
 
