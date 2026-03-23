@@ -1,17 +1,17 @@
-# Version: 1.0.0
-# Author: Roberto Moscetti
-# Affiliation: University of Tuscia, Italy
-# Contact: rmoscetti@unitus.it
-# License: MIT
 # Project: FT-IR Background Monitor
+# Use: This script is used in Thermo Fisher OMNIC workflows to generate
+# a PNG plot for visual monitoring of spectrum background stability.
+# It helps the operator verify complete cleaning of the ATR/HATR module.
 # Software: Thermo Fisher OMNIC
 # Input: background_stability.TSV
 # Output: current_background.png
 # Platform: Windows
 # Python: 3.14
-# Use: This script is used in Thermo Fisher OMNIC workflows to generate
-# a PNG plot for visual monitoring of spectrum background stability.
-# It helps the operator verify complete cleaning of the ATR/HATR module.
+# Author: Roberto Moscetti
+# Affiliation: University of Tuscia, Italy
+# Contact: rmoscetti@unitus.it
+# License: MIT
+# Version: 1.0.0
 
 from pathlib import Path
 import csv
