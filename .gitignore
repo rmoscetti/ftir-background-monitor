@@ -1,0 +1,7 @@
+.deps/
+.venv/
+.ruff_cache/
+__pycache__/
+*.pyc
+current_background.png
+current_background.tmp.png
