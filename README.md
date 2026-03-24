@@ -50,7 +50,7 @@ uv pip install --python 3.14 --target .deps -r requirements.txt
    The path to `pythonw.exe` inside `start_view_plot.ps1` must be edited so that it matches the Python executable installed on the target system.
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File .\start_view_plot.ps1
+.\start_view_plot.ps1
 ```
 
 2. Inside the OMNIC workflow, an EXE node must be added to the repeated cycle.
