@@ -1,4 +1,5 @@
 .deps/
 __pycache__/
 *.pyc
+background_stability_old.TSV
 current_background.png

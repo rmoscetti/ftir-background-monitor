@@ -1,0 +1,1 @@
+Start-Process -FilePath "$env:APPDATA\uv\python\cpython-3.14-windows-x86_64-none\pythonw.exe" -ArgumentList "$PSScriptRoot\view_plot.py"
