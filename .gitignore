@@ -2,5 +2,6 @@
 __pycache__/
 *.pyc
 BG_ATR_UNITUS_TESI_HATR_BG.BG_snapshot.Background.TSV
-BG_ATR_UNITUS_TESI_HATR_BG.BG_snapshot.Background_old.TSV
-current_background.png
+background_stability.tsv
+background_stability_old.TSV
+plot_background.png
