@@ -1,16 +1,22 @@
 # FT-IR background monitor
 
-This small project is intended for Thermo Fisher OMNIC workflows.
+This repository contains helper scripts for a Thermo Fisher OMNIC Paradigm workflow used to check background stability during ATR/HATR cleaning.
 
-Two scripts are included:
+Included scripts:
 
-- `plot_spectrum.py` reads `background_stability.TSV` and writes `current_background.png`
-- `view_plot.py` opens `current_background.png` in a small window and refreshes it when the file changes
-- `start_view_plot.ps1` starts `view_plot.py` with `pythonw.exe`, so the black terminal window is not shown
+- `plot_spectrum.py` reads `background_stability.TSV` and updates `current_background.png`
+- `view_plot.py` displays `current_background.png` in a separate window and refreshes it when the file changes
+- `start_view_plot.ps1` starts `view_plot.py` with `pythonw.exe`, so no terminal window is shown
 
-The viewer is meant to stay open while OMNIC runs the plot script in a loop and the background is monitored during ATR/HATR cleaning.
+The viewer is started outside OMNIC. Inside the OMNIC loop, only `plot_spectrum.py` is executed.
 
-`plot_spectrum.py` also keeps a reference copy called `background_stability_old.TSV`. The first saved spectrum is drawn in red, while the current one is drawn in blue.
+## Files used by the workflow
+
+- `background_stability.TSV` - current background exported by OMNIC
+- `background_stability_old.TSV` - first saved background kept as reference
+- `current_background.png` - image updated by `plot_spectrum.py`
+
+The reference spectrum is plotted in red. The current spectrum is plotted in blue.
 
 ## Windows setup
 
@@ -27,7 +33,7 @@ Install `uv` with Scoop:
 scoop install uv
 ```
 
-The use of `uv` is recommended because it simplifies the Windows setup and allows Python 3.14 and the required packages to be installed locally for this workflow.
+The use of `uv` is recommended because it simplifies Windows setup and allows Python 3.14 and the required packages to be installed locally for this workflow.
 
 Install Python 3.14:
 
@@ -35,53 +41,72 @@ Install Python 3.14:
 uv python install 3.14
 ```
 
-Install the dependencies into `.deps`:
+Install the Python packages into `.deps`:
 
 ```powershell
 uv pip install --python 3.14 --target .deps -r requirements.txt
 ```
 
-## How to use it in OMNIC
+## Viewer startup
 
-1. `view_plot.py` must be started outside OMNIC, before the monitoring loop begins.
+The viewer is started outside OMNIC.
 
-   The recommended launcher is `start_view_plot.ps1`.
-
-   The path to `pythonw.exe` inside `start_view_plot.ps1` must be edited so that it matches the Python executable installed on the target system.
+Command:
 
 ```powershell
 .\start_view_plot.ps1
 ```
 
-2. Inside the OMNIC workflow, an EXE node must be added to the repeated cycle.
+`start_view_plot.ps1` must be edited so that the path to `pythonw.exe` matches the Python installation available on the target PC.
 
-   In that node:
+## OMNIC loop example
 
-   - the executable must be the full path to `python3.14`
-   - the argument must be the full path to `plot_spectrum.py`
+The following cropped screenshot shows the part of the workflow used for the background-check loop:
 
-   Example:
+![OMNIC loop example](docs/omnic_loop_crop.jpg)
 
-```powershell
+Loop sequence:
+
+1. `BG checker` is an `EXE` node that runs `plot_spectrum.py`
+2. `BG switch` is the user decision node
+3. If the result is `True`, the background is still not acceptable and a new background must be acquired
+4. `BG snapshot` acquires the new background
+5. `BG save` saves it as `background_stability.TSV`
+6. `BG loop` returns to the beginning of the cycle
+7. If the result is `False`, the loop is exited and the workflow continues
+
+Meaning of the decision:
+
+- `True` indicates that the crystal/module is still dirty and the loop must continue
+- `False` indicates that the background is acceptable and the loop can stop
+
+## EXE node configuration
+
+Inside the repeated OMNIC cycle, add an `EXE` node.
+
+Set it as follows:
+
+- `Executable`: full path to `python3.14` or `python.exe`
+- `Argument`: full path to `plot_spectrum.py`
+
+Example:
+
+```text
 Executable: C:\Users\username\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\python.exe
 Argument: C:\path\to\FT-IR\plot_spectrum.py
 ```
 
-3. The workflow should keep running until it is stopped by the operator.
-
-At each cycle:
+## Operations at each cycle
 
 - `plot_spectrum.py` reads `background_stability.TSV`
-- on the first run, `background_stability_old.TSV` is created
-- it draws the old spectrum in red and the current spectrum in blue
-- it updates the timestamp at the top of the image
-- it overwrites `current_background.png`
-- `view_plot.py` detects the change and refreshes the window
+- if `background_stability_old.TSV` does not exist yet, it is created from the first available TSV
+- the comparison plot is written to `current_background.png`
+- `view_plot.py` refreshes the displayed image automatically
+- the operator decides whether another background acquisition is needed
 
 ## Important notes
 
-- the OMNIC workflow must export the TSV as `background_stability.TSV`
-- the script is hardcoded to that file name, so if you change it in OMNIC you must change it in `plot_spectrum.py` too
-- the red reference spectrum can be reset by deleting `background_stability_old.TSV`
-- `plot_spectrum.py` does not open any window; it just updates the PNG and exits
-- Python packages are loaded from the `.deps` folder
+- OMNIC must export the background with the exact name `background_stability.TSV`
+- if that file name is changed in the workflow, it must also be changed in `plot_spectrum.py`
+- if a new red reference must be created, delete `background_stability_old.TSV`
+- `plot_spectrum.py` does not open any window; it only updates the PNG and exits
