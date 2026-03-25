@@ -25,8 +25,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # type: ignore[import-not-found]
 
 base = Path(__file__).resolve().parent
-current_tsv = base / "background_stability.TSV"
-old_tsv = base / "background_stability_old.TSV"
+current_tsv = base / "BG_ATR_UNITUS_TESI_HATR_BG.BG_snapshot.Background.TSV"
+old_tsv = base / "BG_ATR_UNITUS_TESI_HATR_BG.BG_snapshot.Background_old.TSV"
 png = base / "current_background.png"
 tmp = base / "current_background.tmp.png"
 
