@@ -17,7 +17,7 @@ The viewer is started outside OMNIC Paradigm. Inside the OMNIC loop, only `plot_
 - `background_stability_old.tsv` - previous background used for comparison
 - `plot_background.png` - image updated by `plot_spectrum.py`
 
-The reference spectrum is plotted in red. The current spectrum is plotted in blue.
+The left subplot shows the previous spectrum in red and the current spectrum in blue. The right subplot shows the background log-ratio in green.
 
 ## Installation procedure (MS Windows)
 
@@ -99,7 +99,9 @@ Set it as follows:
 - `plot_spectrum.py` looks for the OMNIC export TSV matching `*BG_snapshot*TSV`
 - when that file is found, it is copied to `background_stability.tsv`
 - if `background_stability_old.tsv` does not exist yet, it is created from the first available TSV
-- the previous background is plotted in red and the current one in blue
+- the left subplot shows the previous background in red and the current one in blue
+- the right subplot shows the background log-ratio calculated on the selected CH and fingerprint regions
+- the RMS value of the log-ratio is written in the ratio subplot title
 - the comparison plot is written to `plot_background.png`
 - `view_plot.py` refreshes the displayed image automatically
 - the operator decides whether another background acquisition is needed
