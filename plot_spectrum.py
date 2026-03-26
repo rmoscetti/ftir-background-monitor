@@ -1,5 +1,5 @@
 # FT-IR Background Monitor - plot_spectrum.py
-# Version: 1.3.0
+# Version: 1.4.0
 # Roberto Moscetti - University of Tuscia, Italy
 # Contact: rmoscetti@unitus.it
 # License: MIT
@@ -9,6 +9,7 @@
 # The previous spectrum is kept in background_stability_old.tsv.
 # The script then updates plot_background.png.
 # Raw spectra and background log-ratio are shown side by side.
+# RMS and max absolute log-ratio are also saved in a txt file.
 
 from pathlib import Path
 import csv
@@ -30,6 +31,7 @@ base = Path(__file__).resolve().parent
 current_tsv = base / "background_stability.tsv"
 old_tsv = base / "background_stability_old.tsv"
 png = base / "plot_background.png"
+txt = base / "plot_background_metrics.txt"
 tmp = (
     base / "plot_background.tmp.png"
 )  # Temporary file used to avoid read/write issues with view_plot.py
@@ -77,9 +79,22 @@ old_y_roi = old_y[roi]
 # Converts raw data to background log-ratio and computes RMS
 bg_log_ratio = -np.log10(new_y_roi / old_y_roi)  # Log-ratio -log10(I/Io)
 rms = np.round(np.sqrt(np.mean(bg_log_ratio**2)), 4)  # Root Mean Square
+max_abs_log_ratio = np.round(
+    np.max(np.abs(bg_log_ratio)), 4
+)  # Maximum absolute log-ratio value
+timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+# Saves RMS and max absolute log-ratio in a txt file
+with txt.open("a") as f:
+    f.write(f"{timestamp}\tRMS={rms}\tMAX_ABS_LOG_RATIO={max_abs_log_ratio}\n")
 
 # Draws the plot
 fig, axes = plt.subplots(1, 2, figsize=(16, 7))
+
+# Highlights the ROI in both subplots
+for ax in axes:
+    ax.axvspan(2700, 3200, color="gold", alpha=0.15)
+    ax.axvspan(600, 1200, color="gold", alpha=0.15)
 
 if old:
     axes[0].plot(old_x, old_y, color="red", linewidth=0.8, label="Old")
@@ -87,17 +102,24 @@ axes[0].plot(new_x, new_y, color="blue", linewidth=0.8, label="New")
 axes[0].grid(True, color="lightgray")
 axes[0].set_xlim(max(max(old_x), max(new_x)), min(min(old_x), min(new_x)))
 axes[0].set_title("Raw spectra")
+axes[0].set_xlabel("Wavenumber (cm^-1)")
+axes[0].set_ylabel("Intensity")
 if old:
     axes[0].legend()
 
 axes[1].axhline(0, color="black", linewidth=1, linestyle="--")
-axes[1].plot(new_x_roi, bg_log_ratio, color="green", linewidth=0.8, label="Background log-ratio")
+axes[1].plot(
+    new_x_roi, bg_log_ratio, color="green", linewidth=0.8, label="Background log-ratio"
+)
 axes[1].grid(True, color="lightgray")
 axes[1].set_xlim(max(max(old_x), max(new_x)), min(min(old_x), min(new_x)))
-axes[1].set_title(f"Background log-ratio | RMS: {rms}")
+axes[1].set_title(f"Background log-ratio | RMS: {rms} | Max abs: {max_abs_log_ratio}")
+axes[1].set_xlabel("Wavenumber (cm^-1)")
+axes[1].set_ylabel("Background log-ratio")
+axes[1].legend()
 
-fig.suptitle(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-fig.tight_layout()
+fig.suptitle(timestamp)
+fig.tight_layout(rect=[0, 0, 1, 0.96])
 plt.savefig(tmp, dpi=100)  # Saves the plot first to the temporary file
 plt.close()
 os.replace(tmp, png)  # Replaces the final PNG with the temporary one
