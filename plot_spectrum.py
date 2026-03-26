@@ -1,5 +1,5 @@
 # FT-IR Background Monitor - plot_spectrum.py
-# Version: 1.4.0
+# Version: 1.4.1
 # Roberto Moscetti - University of Tuscia, Italy
 # Contact: rmoscetti@unitus.it
 # License: MIT
