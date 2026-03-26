@@ -1,5 +1,5 @@
 # FT-IR Background Monitor - view_plot.py
-# Version: 1.1.1
+# Version: 1.1.2
 # Roberto Moscetti - University of Tuscia, Italy
 # Contact: rmoscetti@unitus.it
 # License: MIT
@@ -42,6 +42,7 @@ def refresh() -> None:
     if pixmap.isNull():
         return
     label.setPixmap(pixmap)  # Replaces the image currently shown in the window
+    label.resize(pixmap.size())  # Resizes the window to the real PNG size
     last = mtime
 
 

@@ -90,20 +90,11 @@ axes[0].set_title("Raw spectra")
 if old:
     axes[0].legend()
 
-axes[1].axhline(
-    0, color="black", linewidth=1, linestyle="--"
-)  # Zero line used as reference
-axes[1].plot(
-    new_x_roi,
-    bg_log_ratio,
-    color="green",
-    linewidth=0.8,
-    label="Background log-ratio",
-)
+axes[1].axhline(0, color="black", linewidth=1, linestyle="--")
+axes[1].plot(new_x_roi, bg_log_ratio, color="green", linewidth=0.8, label="Background log-ratio")
 axes[1].grid(True, color="lightgray")
 axes[1].set_xlim(max(max(old_x), max(new_x)), min(min(old_x), min(new_x)))
 axes[1].set_title(f"Background log-ratio | RMS: {rms}")
-
 
 fig.suptitle(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 fig.tight_layout()
