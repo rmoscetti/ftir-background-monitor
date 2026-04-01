@@ -24,7 +24,7 @@ app = QApplication([])  # Required before creating any Qt window or widget
 label = QLabel("In attesa di plot_background.png")  # Simple window used to show the PNG
 label.setWindowTitle("Background monitor")
 label.setAlignment(Qt.AlignCenter)
-label.resize(1100, 700)  # Initial size before the first PNG is loaded
+label.resize(800, 500)  # Initial size before the first PNG is loaded
 
 # Used to avoid continuous reloads
 last = -1

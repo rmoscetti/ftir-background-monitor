@@ -106,11 +106,10 @@ axes[1].set_xlim(max(max(old_x), max(new_x)), min(min(old_x), min(new_x)))
 axes[1].set_title(f"Background log-ratio | RMS: {rms} | Max abs: {max_abs_log_ratio}")
 axes[1].set_xlabel("Wavenumber (cm^-1)")
 axes[1].set_ylabel("Background log-ratio")
-axes[1].legend()
 
 fig.suptitle(timestamp)
 fig.tight_layout(rect=[0, 0, 1, 0.96])
-plt.savefig(tmp, dpi=100)  # Saves the plot first to the temporary file
+plt.savefig(tmp, dpi=72)  # Saves the plot first to the temporary file
 plt.close()
 os.replace(tmp, png)  # Replaces the final PNG with the temporary one
 os.replace(current_tsv, old_tsv)  # Moves current TSV to old TSV for the next cycle
