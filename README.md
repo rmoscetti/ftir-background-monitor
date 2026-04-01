@@ -4,7 +4,7 @@ This repository contains helper scripts for a Thermo Fisher OMNIC Paradigm workf
 
 Included scripts:
 
-- `plot_spectrum.py` copies the OMNIC-exported TSV to `background_stability.tsv` and updates `plot_background.png`
+- `plot_spectrum.py` copies the OMNIC-exported TSV to `background_stability.tsv`, compares it with `background_stability_old.tsv` and `reference.tsv`, updates `plot_background.png`, and writes `plot_background_metrics.txt`
 - `view_plot.py` displays `plot_background.png` in a separate window and refreshes it when the file changes
 - `start_view_plot.ps1` starts `view_plot.py` with `pythonw.exe`, so no terminal window is shown
 
@@ -13,11 +13,13 @@ The viewer is started outside OMNIC Paradigm. Inside the OMNIC loop, only `plot_
 ## Files used by the workflow
 
 - `*BG_snapshot*TSV` - OMNIC export file; the name must include the string `BG_snapshot`
+- `reference.tsv` - fixed reference background used for comparison
 - `background_stability.tsv` - working copy used by `plot_spectrum.py`
 - `background_stability_old.tsv` - previous background used for comparison
 - `plot_background.png` - image updated by `plot_spectrum.py`
+- `plot_background_metrics.txt` - text file containing date, time, RMS values, and max absolute log-ratio values
 
-The left subplot shows the previous spectrum in red and the current spectrum in blue. The right subplot shows the background log-ratio in green.
+The figure has four panels: previous vs current spectra, current vs previous background log-ratio, reference vs current spectra, and current vs reference background log-ratio.
 
 ## Installation procedure (MS Windows)
 
@@ -99,9 +101,13 @@ Set it as follows:
 - `plot_spectrum.py` looks for the OMNIC export TSV matching `*BG_snapshot*TSV`
 - when that file is found, it is copied to `background_stability.tsv`
 - if `background_stability_old.tsv` does not exist yet, it is created from the first available TSV
-- the left subplot shows the previous background in red and the current one in blue
-- the right subplot shows the background log-ratio calculated on the selected CH and fingerprint regions
-- the RMS value of the log-ratio is written in the ratio subplot title
+- `reference.tsv` is loaded as a fixed comparison background
+- the upper-left panel shows the previous background in red and the current one in blue
+- the upper-right panel shows the background log-ratio for current vs previous background on the selected CH and fingerprint regions
+- the lower-left panel shows the reference background in purple and the current one in blue
+- the lower-right panel shows the background log-ratio for current vs reference background on the selected CH and fingerprint regions
+- RMS and maximum absolute log-ratio values are written in the ratio subplot titles
 - the comparison plot is written to `plot_background.png`
+- metrics are appended to `plot_background_metrics.txt`
 - `view_plot.py` refreshes the displayed image automatically
 - the operator decides whether another background acquisition is needed
