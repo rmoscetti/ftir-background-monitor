@@ -138,7 +138,7 @@ axes[3].set_ylabel("Background log-ratio")
 
 fig.suptitle(timestamp)
 fig.tight_layout(rect=[0, 0, 1, 0.96])
-plt.savefig(tmp, dpi=72)  # Saves the plot first to the temporary file
+plt.savefig(tmp, dpi=58)  # Saves the plot first to the temporary file
 plt.close()
 os.replace(tmp, png)  # Replaces the final PNG with the temporary one
 os.replace(current_tsv, old_tsv)  # Moves current TSV to old TSV for the next cycle
